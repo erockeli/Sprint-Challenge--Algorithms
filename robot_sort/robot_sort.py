@@ -92,12 +92,37 @@ class SortingRobot:
         """
         return self._light == "ON"
 
+
     def sort(self):
-        """
-        Sort the robot's list.
-        """
-        # Fill this out
-        pass
+        self.set_light_on()
+        # While we still have items to sort
+        while self.light_is_on():
+            # Turn light off - if we don't swap - it leaves the loop to signal completion
+            self.set_light_off()
+            # while positions are available to the right - we can continue sorting
+            while self.can_move_right():
+                    # Get item at cur pos and go right to start the comparison
+                self.swap_item()
+                self.move_right()
+
+                # If our item is bigger than shelf item
+                if self.compare_item() == 1:
+                    # swap, move left, (swap - smaller item on shelf), move right, turn light on to signal SWAP
+                    self.swap_item()
+                    self.move_left()
+                    self.swap_item()
+                    self.move_right()
+                    self.set_light_on()
+                else:
+                    # Our item is less than the cur pos, move left, swap, move right
+                    self.move_left()
+                    self.swap_item()
+                    self.move_right()
+                # Reached end of list - go back to pos 0
+            while self.can_move_left():
+                self.move_left()
+        
+        
 
 
 if __name__ == "__main__":
